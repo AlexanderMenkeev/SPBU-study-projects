@@ -1,0 +1,65 @@
+﻿version: "3.7"
+services:
+  db:
+    container_name: postgres
+    image: postgres
+      
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: stripe-example
+    
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+        
+    ports:
+      - '5432:5432'
+      
+    restart: always
+    
+        
+  backend:
+    container_name: backend
+    build: ./backend
+    ports:
+      - '5000:5000'
+
+    depends_on:
+      - db
+    restart: always
+    
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    ports:
+      - '3000:3000'
+
+    depends_on:
+      - backend
+    restart: always
+    
+        
+        
+#version: '3.4'
+#
+#services:
+#  frontend:
+#    build: ./front_task1
+#    container_name: frontend
+#    depends_on: [backend]
+#    ports:
+#      - "5000:5000"
+#    networks:
+#      - net
+#
+#
+#
+#  backend:
+#    build: ./back_task1
+#    container_name: backend
+#    volumes:
+#      - ./back_task1:/app
+#    ports:
+#      - "5002:5000"
+#    networks:
+#      - net
